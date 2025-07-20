@@ -22,9 +22,9 @@ def get_sinusoid_encoding_table(n_position, d_model):
     sinusoid_table[:, 1::2] = np.cos(sinusoid_table[:, 1::2])
     return torch.FloatTensor(sinusoid_table)
 
-class BiConvLSTM(nn.Module):
+class B2CN(nn.Module):
     def __init__(self, input_size=100, hidden_size=256, num_layers=2, dropout=0.1, kernel_size=3, out_channels=64):
-        super(BiConvLSTM, self).__init__()
+        super(B2CN, self).__init__()
         
         self.conv1 = nn.Conv1d(in_channels=input_size, out_channels=out_channels, kernel_size=kernel_size, padding=1)
         self.conv2 = nn.Conv1d(in_channels=out_channels, out_channels=out_channels, kernel_size=kernel_size, padding=1)
@@ -52,9 +52,9 @@ class BiConvLSTM(nn.Module):
 
         return output
     
-class GraphGIN(torch.nn.Module):
+class GIN(torch.nn.Module):
     def __init__(self, c_feature=108,MLP_dim=96):
-        super(GraphGIN, self).__init__()
+        super(GIN, self).__init__()
         nn1 = Sequential(Linear(c_feature, MLP_dim), ReLU(), Linear(MLP_dim, MLP_dim))
         self.conv1 = GINConv(nn1)
         self.bn1 = torch.nn.BatchNorm1d(MLP_dim)
@@ -82,7 +82,7 @@ class GraphGIN(torch.nn.Module):
 
         return x
 
-class GraphSAGE(torch.nn.Module):
+class SAGE(torch.nn.Module):
     def __init__(self,c_feature=108,MLP_dim=88):
         super().__init__()
         self.conv1 = SAGEConv(c_feature,MLP_dim,aggr='mean')
@@ -162,9 +162,9 @@ class MultiFusion_DTA(torch.nn.Module):
         self.src_emb = nn.Embedding(26, d_model)
         self.pos_emb = nn.Embedding.from_pretrained(get_sinusoid_encoding_table(26, d_model), freeze=True)
 
-        self.protein_seq = BiConvLSTM(input_size=100, hidden_size=256, num_layers=2, dropout=dropout)
-        self.drug_graph = GraphGIN()
-        self.complex_graph = GraphSAGE()
+        self.protein_seq = B2CN(input_size=100, hidden_size=256, num_layers=2, dropout=dropout)
+        self.drug_graph = GIN()
+        self.complex_graph = SAGE()
 
         self.attention_layer = MACNet(input_channels=3, attention_dim=100)
         self.self_attention_layer = AACNet(input_dim=100, attention_dim=100)
