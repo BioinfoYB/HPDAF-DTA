@@ -1,4 +1,4 @@
-name: HPDAF-DTA
+name: hpdaf
 channels:
   - conda-forge
   - bioconda
@@ -270,4 +270,4 @@ dependencies:
       - urllib3==2.2.2
       - xlwt==1.3.0
       - yarl==1.9.7
-prefix: /root/miniconda3/envs/HPDAF-DTA
+prefix: /root/miniconda3/envs/hpdaf
