@@ -149,9 +149,9 @@ class AACNet(nn.Module):
 
         return weighted_x, attn_scores
 
-class MultiFusion_DTA(torch.nn.Module):
+class HPDAF_DTA(torch.nn.Module):
     def __init__(self, MLP_dim=82, dropout=0.1, c_feature=108):
-        super(MultiFusion_DTA, self).__init__()
+        super(HPDAF_DTA, self).__init__()
 
         self.dropout = nn.Dropout(dropout)
         self.relu = nn.ReLU()
